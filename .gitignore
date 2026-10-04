@@ -39,3 +39,5 @@ Thumbs.db
 # Logs / temporary files
 *.log
 *.tmp
+# Large metadata files
+metadata/trial_metadata.txt
