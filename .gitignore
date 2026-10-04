@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Datasets - DO NOT PUSH
+dataset/
+ASVspoof2021_DF_eval_part00/
+temp_la_train/
+
+# Dataset archives
+*.zip
+
+# Generated features - DO NOT PUSH
+features/
+
+# Model files
+*.pth
+*.pt
+*.ckpt
+
+# Training outputs
+training/checkpoints/
+training/runs/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs / temporary files
+*.log
+*.tmp
