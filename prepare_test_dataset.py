@@ -6,21 +6,25 @@ from pathlib import Path
 # CONFIGURATION
 # ============================================================
 
-# Change this to the location of your trial_metadata.txt
-METADATA_FILE = Path(
-     r"D:\PBL 5\metadata\trial_metadata.txt"
+# Project root directory
+PROJECT_ROOT = Path(__file__).resolve().parent
+
+# Location of trial_metadata.txt
+METADATA_FILE = (
+    PROJECT_ROOT / "metadata" / "trial_metadata.txt"
 )
 
-# Change this to the folder containing the ASVspoof DF FLAC files
-# Example:
-# D:\PBL 5\ASVspoof2021_DF_eval_part00\ASVspoof2021_DF_eval\flac
-AUDIO_ROOT = Path(
-   r"D:\PBL 5\ASVspoof2021_DF_eval_part00\ASVspoof2021_DF_eval\flac"
+# Folder containing the ASVspoof DF FLAC files
+AUDIO_ROOT = (
+    PROJECT_ROOT
+    / "ASVspoof2021_DF_eval_part00"
+    / "ASVspoof2021_DF_eval"
+    / "flac"
 )
 
 # Where our small test dataset will be created
-OUTPUT_ROOT = Path(
-     r"D:\PBL 5\dataset\raw"
+OUTPUT_ROOT = (
+    PROJECT_ROOT / "dataset" / "raw"
 )
 
 # Number of samples per class
@@ -271,8 +275,8 @@ def main():
     print(OUTPUT_ROOT)
 
     print("\nExpected structure:")
-    print(r"D:\PBL 5\dataset\raw\real")
-    print(r"D:\PBL 5\dataset\raw\fake")
+    print(OUTPUT_ROOT / "real")
+    print(OUTPUT_ROOT / "fake")
 
 
 if __name__ == "__main__":
