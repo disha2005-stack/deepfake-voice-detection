@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07131f">
+  <title>VOICEGUARD | Deepfake Voice Detection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Voiceguard home">
+        <span class="brand-mark">V<span>G</span></span>
+        <span><strong>VOICEGUARD</strong><small>VOICE AUTHENTICITY LAB</small></span>
+      </a>
+      <div class="header-meta">
+        <span class="status-dot" id="system-dot"></span>
+        <span id="system-status">Checking model</span>
+        <span class="model-chip">RESNET18 · 16 KHZ</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">AUDIO FORENSICS CONSOLE</p>
+          <h1>Voice authenticity, <span>at a glance.</span></h1>
+          <p class="lede">Inspect a recording for synthetic speech. Each five-second window is scored independently.</p>
+        </div>
+        <div class="threshold"><span>DECISION THRESHOLD</span><strong>0.50</strong><span>FAKE PROBABILITY</span></div>
+      </section>
+
+      <div class="dashboard-grid">
+        <section class="panel input-panel" aria-labelledby="input-title">
+          <div class="panel-heading">
+            <div><p class="eyebrow">01 / SOURCE</p><h2 id="input-title">Audio input</h2></div>
+            <span class="step-number">01</span>
+          </div>
+          <div class="drop-zone" id="drop-zone" tabindex="0" role="button" aria-label="Choose a WAV file">
+            <input id="file-input" type="file" accept=".wav,audio/wav" hidden>
+            <div class="wave-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <strong>Drop a WAV recording here</strong>
+            <span>or <button class="text-button" id="browse-button" type="button">browse files</button></span>
+            <small>WAV · up to 25 MB · minimum 1 second</small>
+          </div>
+          <div class="record-row">
+            <button class="button button-outline" id="record-button" type="button"><span class="record-icon"></span> Record</button>
+            <button class="button button-stop" id="stop-button" type="button" disabled><span class="stop-icon"></span> Stop</button>
+            <span class="record-time" id="record-time">00:00</span>
+            <span class="record-note" id="record-note">Microphone ready</span>
+          </div>
+          <div class="selected-audio" id="selected-audio" hidden>
+            <div class="file-info"><span class="file-wave">WAV</span><div><strong id="file-name">No file selected</strong><small id="file-size"></small></div><button id="clear-file" class="icon-button" type="button" aria-label="Clear selected audio" title="Clear selected audio">×</button></div>
+            <audio id="audio-preview" controls></audio>
+          </div>
+          <p class="error-message" id="input-error" role="alert" hidden></p>
+          <button class="button button-primary analyze-button" id="analyze-button" type="button" disabled><span>Analyze recording</span><span aria-hidden="true">↗</span></button>
+        </section>
+
+        <section class="panel result-panel" aria-labelledby="analysis-title">
+          <div class="panel-heading">
+            <div><p class="eyebrow">02 / CLASSIFICATION</p><h2 id="analysis-title">Analysis</h2></div>
+            <span class="step-number">02</span>
+          </div>
+          <div id="empty-result" class="empty-result"><span class="scan-line"></span><strong>Awaiting audio</strong><p>Results will appear here after analysis.</p></div>
+          <div id="loading-result" class="loading-result" hidden><span class="spinner"></span><strong>Analyzing signal</strong><p id="loading-detail">Preparing audio segments…</p></div>
+          <div id="analysis-result" hidden>
+            <div class="verdict-row"><div><span class="eyebrow">OVERALL VERDICT</span><h3 id="verdict">—</h3></div><span class="verdict-symbol" id="verdict-symbol">?</span></div>
+            <div class="probability-list">
+              <div class="probability-item"><div><span>REAL</span><strong id="real-value">0%</strong></div><div class="meter"><i id="real-meter"></i></div></div>
+              <div class="probability-item"><div><span>FAKE</span><strong id="fake-value">0%</strong></div><div class="meter fake-meter"><i id="fake-meter"></i></div></div>
+            </div>
+            <div class="metrics-row"><div><span>CONFIDENCE</span><strong id="confidence-value">—</strong></div><div><span>PROCESSING</span><strong id="duration-value">—</strong></div><div><span>SEGMENTS</span><strong id="segment-count">—</strong></div></div>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel segments-panel" aria-labelledby="segments-title">
+        <div class="panel-heading compact-heading"><div><p class="eyebrow">03 / WINDOW-BY-WINDOW</p><h2 id="segments-title">Segment analysis</h2></div><span class="subtle-note">Consecutive · non-overlapping · 5 sec</span></div>
+        <div class="segment-list" id="segment-list"><p class="muted-empty">No segments analyzed yet.</p></div>
+      </section>
+
+      <section class="panel spectrogram-panel" aria-labelledby="spectrogram-title">
+        <div class="panel-heading compact-heading"><div><p class="eyebrow">04 / SIGNAL VIEW</p><h2 id="spectrogram-title">Mel spectrogram</h2></div><span class="subtle-note">128 mel bands · 20–8,000 Hz</span></div>
+        <div class="spectrogram-empty" id="spectrogram-empty">The first analyzed segment’s spectral energy will appear here.</div>
+        <figure id="spectrogram-figure" hidden><img id="spectrogram-image" alt="Mel-frequency spectrogram of the first analyzed audio segment"><figcaption>Segment 1 · frequency over time · color indicates relative power in decibels</figcaption></figure>
+      </section>
+
+      <section class="panel history-panel" aria-labelledby="history-title">
+        <div class="panel-heading compact-heading"><div><p class="eyebrow">05 / LOCAL RECORD</p><h2 id="history-title">Detection history</h2></div><button class="button button-quiet" id="clear-history" type="button" disabled>Clear history</button></div>
+        <div class="history-table-wrap"><table><thead><tr><th>FILE</th><th>RESULT</th><th>CONFIDENCE</th><th>ANALYZED</th></tr></thead><tbody id="history-body"><tr><td class="history-empty" colspan="4">No analyses saved on this device.</td></tr></tbody></table></div>
+      </section>
+    </main>
+
+    <footer><span>VOICEGUARD <span class="footer-dot">/</span> ACADEMIC PROJECT</span><span>ResNet18 detection · BiLSTM comparison · Flask · PyTorch · Librosa</span></footer>
+  </div>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>

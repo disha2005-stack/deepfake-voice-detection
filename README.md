@@ -1,321 +1,233 @@
-# Deepfake Voice Detection & Audio Forensics
+# Deepfake Voice Detection & Audio Forensics â€” Voice Guard
 
-A deepfake voice detection and audio forensics project focused on identifying AI-generated and spoofed speech using audio signal processing and deep learning.
-
-The current development stage focuses on building a reliable, reusable audio preprocessing and dataset pipeline before finalizing the deep-learning architecture.
+Voice Guard is a deep-learning-based project designed to distinguish genuine human speech from AI-generated or spoofed speech. It combines audio preprocessing, Mel-spectrogram feature extraction, deep-learning models, and a Flask-based application for audio analysis.
 
 ## Project Objectives
 
-* Detect real (bonafide) and fake (spoofed) speech.
-* Support multiple Indian languages.
-* Build a reusable audio preprocessing pipeline.
-* Convert cleaned audio into Mel-spectrogram representations.
-* Maintain proper separation between training and independent evaluation data.
-* Prepare the pipeline for future deep-learning models.
-* Eventually support real-time deepfake voice detection.
+- Detect genuine (REAL) and AI-generated or spoofed (FAKE) speech.
+- Support Kannada, Hindi, Tamil, and Telugu.
+- Convert audio recordings into Mel-spectrogram representations.
+- Train and compare ResNet18 and BiLSTM models.
+- Evaluate model performance using classification metrics.
+- Provide an application for uploading and analysing WAV recordings.
 
-## Current Language Support
+## Supported Languages
 
-The current Indian-language dataset pipeline includes:
+The Indian-language dataset includes:
 
-* Kannada
-* Hindi
-* Tamil
-* Telugu
+- Kannada
+- Hindi
+- Tamil
+- Telugu
 
-The preprocessing pipeline is designed so that additional Indian languages can be added later.
+## Dataset Description
 
-## Dataset Organization
+The Indian-language dataset contains **7,403 audio samples**:
 
-The project uses multiple data sources.
+| Class | Samples |
+|---|---:|
+| Real | 3,395 |
+| Fake | 4,008 |
+| **Total** | **7,403** |
 
-### Indian-language data
+The dataset is divided into:
 
-Indian-language real and synthetic speech are prepared for the main training pipeline.
+| Split | Samples |
+|---|---:|
+| Training | 5,214 |
+| Validation | 1,120 |
+| Testing | 1,069 |
+| **Total** | **7,403** |
 
-The current focus includes:
+The project uses real speech from IndicVoices and synthetic speech from IndicSynth.
 
-* Real speech from IndicVoices
-* Synthetic/fake speech from IndicSynt
-* Kannada
-* Hindi
-* Tamil
-* Telugu
+ASVspoof datasets are maintained separately for independent evaluation and are not mixed into the Indian-language training dataset.
 
-### ASVspoof
+> Dataset files, archives, generated features, and trained model checkpoints are excluded from this repository because of their size and distribution considerations.
 
-ASVspoof data is maintained separately from the Indian-language training dataset.
+## System Workflow
 
-It is used for independent testing/evaluation and is not mixed directly into the Indian-language training data.
+1. Collect real and synthetic audio recordings.
+2. Clean and validate the audio.
+3. Standardize audio to 16 kHz and mono.
+4. Prepare training, validation, and test splits.
+5. Generate Mel-spectrograms.
+6. Train the ResNet18 and BiLSTM models.
+7. Evaluate both models on the held-out test set.
+8. Compare model performance.
+9. Analyse WAV recordings through the Voice Guard application.
 
-> Dataset files are intentionally not stored in this GitHub repository because of their large size and dataset licensing/distribution considerations.
+## Deep Learning Models
+
+### ResNet18
+
+ResNet18 is used as the primary image-based classifier. It learns patterns from Mel-spectrogram representations to classify audio as REAL or FAKE.
+
+### BiLSTM
+
+The Bidirectional Long Short-Term Memory (BiLSTM) model processes sequential features extracted from Mel-spectrograms. It is implemented as a second model for comparison.
+
+Both models use the same 1,069-sample test set for the reported comparison.
+
+## Model Evaluation Results
+
+The following results were obtained on the held-out Indian-language test split:
+
+| Metric | ResNet18 | BiLSTM |
+|---|---:|---:|
+| Accuracy | 99.72% | 98.13% |
+| Fake Precision | 99.51% | 98.03% |
+| Fake Recall | 100.00% | 98.68% |
+| Fake F1-score | 99.75% | 98.36% |
+| ROC-AUC | 1.0000 | 0.9965 |
+| Inference time/sample | 136.47 ms | 37.34 ms |
+| Model size | 128 MB | 6.82 MB |
+
+ResNet18 achieved higher classification performance on this test split. BiLSTM was smaller and had lower per-sample inference time.
+
+These are experimental results on the project's held-out test data. Further evaluation on additional independent datasets and real-world recordings is required before making broader performance claims.
+
+## Voice Guard Application
+
+The project includes a Flask-based application for analysing uploaded WAV recordings.
+
+Application features include:
+
+- WAV audio upload and analysis.
+- REAL or FAKE classification.
+- Fake-voice probability scoring.
+- Segment-level analysis using five-second audio segments.
+- Mel-spectrogram visualization.
+- Local analysis history using SQLite.
+
+The application loads the trained ResNet18 checkpoint for inference.
 
 ## Repository Structure
 
 ```text
 deepfake-voice-detection/
-│
-├── .gitignore
-├── README.md
-│
-├── collect_indicsynth.py
-├── download_indic_real.py
-├── download_kannada_test.py
-├── prepare_test_dataset.py
-├── preprocess_indian_audio.py
-├── test_indicvoices.py
-│
-├── metadata/
-│
-├── preprocessing/
-│   ├── check_source_groups.py
-│   ├── clean_audio.py
-│   ├── create_indian_split.py
-│   ├── create_melspectrograms.py
-│   ├── create_test_melspectrogram.py
-│   ├── extract_la_dataset.py
-│   ├── generate_kannada_mels.py
-│   ├── generate_mels.py
-│   ├── select_balanced_dataset.py
-│   ├── verify_indian_mels.py
-│   ├── verify_indian_split.py
-│   ├── verify_mels.py
-│   └── verify_preprocessing.py
-│
-├── protocols/
-│
-├── training/
-│   ├── calculate_class_weights.py
-│   ├── calculate_normalization.py
-│   ├── dataset_loader.py
-│   ├── test_augmentation.py
-│   └── train_config.py
-│
-├── dataset/                 # Local only - not tracked
-│   ├── raw/
-│   └── cleaned/
-│
-└── features/                # Local only - not tracked
-    └── mel_spectrograms/
-```
-
-## Preprocessing Pipeline
-
-The current preprocessing workflow is:
-
-```text
-Raw Audio
-    ↓
-Dataset Collection
-    ↓
-Audio Cleaning & Validation
-    ↓
-16 kHz / Mono Standardization
-    ↓
-Duration & Audio Quality Checks
-    ↓
-Normalization
-    ↓
-Train/Validation/Test Preparation
-    ↓
-Mel-Spectrogram Generation
-    ↓
-Mel-Spectrogram Verification
-    ↓
-Training Dataset
-```
-
-The preprocessing stage is designed to remain independent of the final model architecture so that different deep-learning approaches can be evaluated later.
-
-## Audio Standardization
-
-The cleaned audio is checked for properties including:
-
-* 16 kHz sampling rate
-* Mono channel format
-* Valid audio duration
-* Readable audio files
-* No NaN or infinite values
-* Proper amplitude normalization
-
-## Feature Representation
-
-The current feature pipeline generates **Mel-spectrograms** from the cleaned audio.
-
-Generated spectrograms are stored locally under:
-
-```text
-features/mel_spectrograms/
-```
-
-These generated files are excluded from GitHub because they can be recreated from the preprocessing pipeline.
-
-## Verification
-
-The project includes verification scripts for checking:
-
-* Audio validity
-* Indian-language dataset integrity
-* Dataset splits
-* Source-group separation
-* Mel-spectrogram validity
-* Preprocessing results
-
-Examples:
-
-```powershell
-python verify_audio.py
-python verify_indian_dataset.py
-python verify_cleaned_indian.py
-```
-
-Additional verification utilities are available under:
-
-```text
-preprocessing/
+â”‚
+â”œâ”€â”€ app/
+â”‚   â”œâ”€â”€ static/
+â”‚   â”œâ”€â”€ templates/
+â”‚   â”œâ”€â”€ tests/
+â”‚   â”œâ”€â”€ voiceguard/
+â”‚   â”œâ”€â”€ requirements.txt
+â”‚   â””â”€â”€ run.py
+â”‚
+â”œâ”€â”€ preprocessing/
+â”‚   â”œâ”€â”€ clean_audio.py
+â”‚   â”œâ”€â”€ create_indian_split.py
+â”‚   â”œâ”€â”€ create_melspectrograms.py
+â”‚   â”œâ”€â”€ generate_mels.py
+â”‚   â””â”€â”€ verification scripts
+â”‚
+â”œâ”€â”€ training/
+â”‚   â”œâ”€â”€ dataset_loader.py
+â”‚   â”œâ”€â”€ train_config.py
+â”‚   â”œâ”€â”€ resnet18_model.py
+â”‚   â”œâ”€â”€ lstm_model.py
+â”‚   â”œâ”€â”€ train_resnet18.py
+â”‚   â”œâ”€â”€ train_lstm.py
+â”‚   â”œâ”€â”€ evaluate_resnet18.py
+â”‚   â””â”€â”€ evaluate_lstm.py
+â”‚
+â”œâ”€â”€ results/
+â”‚   â”œâ”€â”€ comparison_table.csv
+â”‚   â”œâ”€â”€ compare_models.py
+â”‚   â”œâ”€â”€ confusion matrices
+â”‚   â”œâ”€â”€ comparison charts
+â”‚   â””â”€â”€ evaluation reports
+â”‚
+â”œâ”€â”€ dataset/                 # Local only; not tracked
+â”œâ”€â”€ features/                # Local only; not tracked
+â”œâ”€â”€ README.md
+â””â”€â”€ .gitignore
 ```
 
 ## Environment Setup
 
-### 1. Clone the repository
+Clone the repository:
 
 ```powershell
 git clone https://github.com/disha2005-stack/deepfake-voice-detection.git
 cd deepfake-voice-detection
 ```
 
-### 2. Create a virtual environment
+Create and activate a virtual environment:
 
 ```powershell
 python -m venv venv
-```
-
-### 3. Activate the environment
-
-Windows PowerShell:
-
-```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-### 4. Install required Python packages
+Install application dependencies:
 
-Install the dependencies required by the preprocessing scripts.
+```powershell
+pip install -r app\requirements.txt
+```
 
-The project currently uses Python 3.13 and packages including:
+### Running the application
 
-* NumPy
-* Librosa
-* SoundFile
-* Scikit-learn
-* Pillow
-* Hugging Face Datasets
-
-Additional packages may be required as model development progresses.
-
-## Dataset Setup
-
-Datasets are **not included in this repository**.
-
-They must obtain the required datasets separately and place them in the expected local directories.
-
-The `.gitignore` file prevents large datasets, archives, generated features, and model files from being uploaded accidentally.
-
-### Important
-
-Do not commit:
+The trained ResNet18 checkpoint must first be available locally at:
 
 ```text
-dataset/
-features/
-*.zip
-ASVspoof2021_DF_eval_part00/
-temp_la_train/
+training/checkpoints/resnet18_best.pth
 ```
 
-## Test Dataset Preparation
+Model checkpoints are not included in the GitHub repository.
 
-The `prepare_test_dataset.py` script prepares a small ASVspoof evaluation/test subset.
-
-Run:
+Start the application from the project root:
 
 ```powershell
-python prepare_test_dataset.py
+python app\run.py
 ```
 
-The script uses project-relative paths, so it does not depend on a specific Windows username or installation directory.
-
-## Team Development Workflow
-
-Before starting work:
+Run application tests:
 
 ```powershell
-git pull
+python -m pytest app\tests -q
 ```
 
-After making changes:
+## Repository Exclusions
 
-```powershell
-git status
-git add .
-git commit -m "Describe your changes"
-git push
-```
+The following are intentionally excluded from GitHub:
 
-### Important
+- Raw and cleaned datasets.
+- Dataset archives.
+- Generated Mel-spectrogram images.
+- Trained model checkpoints.
+- Virtual environment files.
+- Local application databases and uploaded recordings.
 
-Do not commit large datasets or generated files.
+Check `.gitignore` before committing changes.
 
-Always check:
-
-```powershell
-git status
-```
-
-before pushing.
-
-## Current Development Status
+## Current Project Status
 
 ### Completed
 
-* [x] Project repository created
-* [x] Git/GitHub integration
-* [x] Dataset preprocessing structure
-* [x] Indian-language data pipeline
-* [x] Kannada, Hindi, Tamil and Telugu pipeline preparation
-* [x] Audio cleaning and validation
-* [x] Mel-spectrogram generation pipeline
-* [x] Dataset verification scripts
-* [x] Source-group analysis
-* [x] Class imbalance analysis
-* [x] Training configuration preparation
-* [x] Portable test dataset preparation script
+- Indian-language audio dataset preparation.
+- Audio cleaning and preprocessing.
+- Mel-spectrogram generation.
+- Training, validation, and test dataset preparation.
+- ResNet18 model implementation and evaluation.
+- BiLSTM model implementation and evaluation.
+- Model comparison and evaluation visualizations.
+- Flask-based Voice Guard application.
+- Application testing.
 
-### In Progress
+### Further Work
 
-* [ ] Final deep-learning architecture selection
-* [ ] Model training
-* [ ] Model evaluation
-* [ ] Cross-language performance analysis
-* [ ] Real-time inference pipeline
-* [ ] Audio forensics analysis
-* [ ] Final application/interface
+- Evaluation on additional independent datasets.
+- Broader cross-language and real-world testing.
+- Improving inference speed and model efficiency.
+- Further robustness testing against different audio conditions.
 
-## Future Direction
+## Project Information
 
-The project is intended to evolve toward a real-time deepfake voice detection system capable of:
+**Project:** Deepfake Voice Detection & Audio Forensics â€” Voice Guard
+**Technology:** Python, PyTorch, Librosa, Flask, NumPy, Scikit-learn, SQLite
+**Models:** ResNet18 and BiLSTM
+**Application:** Flask-based WAV audio analysis dashboard
 
-* Multi-language deepfake detection
-* Real-time audio analysis
-* Deepfake confidence scoring
-* Audio forensic indicators
-* Model comparison
-* Robust evaluation across different datasets and languages
-
-## Project Team
-
-This is a college PBL project developed as a team project.
-
----
-
-**Note:** Dataset files and generated feature files are intentionally excluded from this repository. Follow the dataset setup instructions before running the complete preprocessing pipeline.
+This is an academic project and its predictions should be treated as model-based indicators, not definitive forensic proof.

@@ -1,0 +1,9 @@
+Flask>=3.0,<4.0
+librosa>=0.10
+matplotlib>=3.8
+numpy>=1.26
+Pillow>=10.0
+pytest>=8.0
+SoundFile>=0.12
+torch>=2.0
+torchvision>=0.15

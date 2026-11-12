@@ -1,0 +1,16 @@
+Metric,ResNet18,LSTM
+Accuracy,0.9972,0.9813
+Precision (FAKE),0.9951,0.9803
+Recall (FAKE),1.0000,0.9868
+F1-score (FAKE),0.9975,0.9836
+Precision (macro),0.9975,0.9814
+Recall (macro),0.9968,0.9804
+F1-score (macro),0.9971,0.9809
+Precision (weighted),0.9972,0.9813
+Recall (weighted),0.9972,0.9813
+F1-score (weighted),0.9972,0.9813
+ROC-AUC,1.0000,0.9965
+Inference time total (s),145.89,39.91
+Inference time per sample (ms),136.470,37.337
+Model size (MB),128.0,6.8
+Test samples,1069,1069

@@ -1,0 +1,33 @@
+
+BI-LSTM TEST EVALUATION
+=======================
+
+Checkpoint epoch: 4
+Best validation loss: 0.027770
+
+Test samples: 1069
+Device: cpu
+
+Accuracy: 0.9813
+Precision (FAKE): 0.9803
+Recall (FAKE): 0.9868
+F1-score (FAKE): 0.9836
+ROC-AUC: 0.9965
+
+Total inference time: 39.9133 seconds
+Per-sample inference time: 37.3370 ms
+Checkpoint size: 6.82 MB
+
+Confusion matrix:
+[[451  12]
+ [  8 598]]
+
+Classification report:
+              precision    recall  f1-score   support
+
+        REAL       0.98      0.97      0.98       463
+        FAKE       0.98      0.99      0.98       606
+
+    accuracy                           0.98      1069
+   macro avg       0.98      0.98      0.98      1069
+weighted avg       0.98      0.98      0.98      1069

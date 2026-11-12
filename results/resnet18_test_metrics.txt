@@ -1,0 +1,165 @@
+============================================================
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+  RESNET18 — TEST SET METRICS
+=
+
+Checkpoint          : resnet18_best.pth
+Checkpoint epoch    : 4
+Best val loss       : 0.003628
+Test samples        : 1069
+Device              : cpu
+
+--- Per-class (positive = FAKE, label 1) ---
+Accuracy            : 0.9972
+Precision (FAKE)    : 0.9951
+Recall    (FAKE)    : 1.0000
+F1-score  (FAKE)    : 0.9975
+
+--- Macro average ---
+Precision (macro)   : 0.9975
+Recall    (macro)   : 0.9968
+F1-score  (macro)   : 0.9971
+
+--- Weighted average ---
+Precision (weighted): 0.9972
+Recall    (weighted): 0.9972
+F1-score  (weighted): 0.9972
+
+ROC-AUC             : 1.0000
+
+--- Inference ---
+Total inference time: 145.89 s
+Per-sample time     : 136.470 ms
+Checkpoint size     : 128.0 MB
+
+--- Confusion matrix (rows=actual, cols=predicted) ---
+                Pred REAL   Pred FAKE
+  Actual REAL :       460           3
+  Actual FAKE :         0         606
+
+--- Full classification report ---
+              precision    recall  f1-score   support
+
+        REAL       1.00      0.99      1.00       463
+        FAKE       1.00      1.00      1.00       606
+
+    accuracy                           1.00      1069
+   macro avg       1.00      1.00      1.00      1069
+weighted avg       1.00      1.00      1.00      1069
