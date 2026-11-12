@@ -1,4 +1,4 @@
-# Deepfake Voice Detection & Audio Forensics â€” Voice Guard
+# Deepfake Voice Detection & Audio Forensics Voice Guard
 
 Voice Guard is a deep-learning-based project designed to distinguish genuine human speech from AI-generated or spoofed speech. It combines audio preprocessing, Mel-spectrogram feature extraction, deep-learning models, and a Flask-based application for audio analysis.
 
@@ -105,44 +105,45 @@ The application loads the trained ResNet18 checkpoint for inference.
 ## Repository Structure
 
 ```text
+
 deepfake-voice-detection/
-â”‚
-â”œâ”€â”€ app/
-â”‚   â”œâ”€â”€ static/
-â”‚   â”œâ”€â”€ templates/
-â”‚   â”œâ”€â”€ tests/
-â”‚   â”œâ”€â”€ voiceguard/
-â”‚   â”œâ”€â”€ requirements.txt
-â”‚   â””â”€â”€ run.py
-â”‚
-â”œâ”€â”€ preprocessing/
-â”‚   â”œâ”€â”€ clean_audio.py
-â”‚   â”œâ”€â”€ create_indian_split.py
-â”‚   â”œâ”€â”€ create_melspectrograms.py
-â”‚   â”œâ”€â”€ generate_mels.py
-â”‚   â””â”€â”€ verification scripts
-â”‚
-â”œâ”€â”€ training/
-â”‚   â”œâ”€â”€ dataset_loader.py
-â”‚   â”œâ”€â”€ train_config.py
-â”‚   â”œâ”€â”€ resnet18_model.py
-â”‚   â”œâ”€â”€ lstm_model.py
-â”‚   â”œâ”€â”€ train_resnet18.py
-â”‚   â”œâ”€â”€ train_lstm.py
-â”‚   â”œâ”€â”€ evaluate_resnet18.py
-â”‚   â””â”€â”€ evaluate_lstm.py
-â”‚
-â”œâ”€â”€ results/
-â”‚   â”œâ”€â”€ comparison_table.csv
-â”‚   â”œâ”€â”€ compare_models.py
-â”‚   â”œâ”€â”€ confusion matrices
-â”‚   â”œâ”€â”€ comparison charts
-â”‚   â””â”€â”€ evaluation reports
-â”‚
-â”œâ”€â”€ dataset/                 # Local only; not tracked
-â”œâ”€â”€ features/                # Local only; not tracked
-â”œâ”€â”€ README.md
-â””â”€â”€ .gitignore
+│
+├── app/
+│   ├── static/
+│   ├── templates/
+│   ├── tests/
+│   ├── voiceguard/
+│   ├── requirements.txt
+│   └── run.py
+│
+├── preprocessing/
+│   ├── clean_audio.py
+│   ├── create_indian_split.py
+│   ├── create_melspectrograms.py
+│   ├── generate_mels.py
+│   └── verification scripts
+│
+├── training/
+│   ├── dataset_loader.py
+│   ├── train_config.py
+│   ├── resnet18_model.py
+│   ├── lstm_model.py
+│   ├── train_resnet18.py
+│   ├── train_lstm.py
+│   ├── evaluate_resnet18.py
+│   └── evaluate_lstm.py
+│
+├── results/
+│   ├── comparison_table.csv
+│   ├── compare_models.py
+│   ├── confusion matrices
+│   ├── comparison charts
+│   └── evaluation reports
+│
+├── dataset/       # Local only; not tracked
+├── features/      # Local only; not tracked
+├── README.md
+└── .gitignore
 ```
 
 ## Environment Setup
